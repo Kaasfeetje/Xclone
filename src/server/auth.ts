@@ -19,15 +19,21 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      username?: string;
+      profilePicture?: string;
+      isRegistered: boolean;
       // ...other properties
       // role: UserRole;
     };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    username?: string;
+    profilePicture?: string;
+    isRegistered: boolean;
+    // ...other properties
+    // role: UserRole;
+  }
 }
 
 /**
@@ -42,6 +48,9 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        isRegistered: user.isRegistered,
       },
     }),
   },

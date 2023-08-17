@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
-import { api } from "~/utils/api";
 import { RiSearchLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -15,9 +14,14 @@ export default function Home() {
   }
 
   if (status === "unauthenticated") {
-    router.push("/signin?redirect=/thisisatest");
+    router.push("/signin?redirect=/");
     return <p>Access Denied</p>;
   }
+
+  if (!session?.user.isRegistered) {
+    router.push("/register?redirect=/");
+  }
+
   return (
     <>
       <Head>

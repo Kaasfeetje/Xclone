@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -6,7 +5,6 @@ import { signIn } from "next-auth/react";
 type Props = {};
 
 const signin = (props: Props) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 

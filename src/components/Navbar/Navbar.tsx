@@ -1,21 +1,33 @@
 import React from "react";
 import NavbarItem from "./NavbarItem";
 import { RiUserLine, RiFileListLine, RiBookmarkLine } from "react-icons/ri";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const { data: session, status } = useSession();
+
+  if (status !== "authenticated") {
+    return;
+  }
+
   return (
     <div className="h-screen max-h-screen bg-gray-300">
-      <div>Profile header thingy placeholder</div>
+      <div>
+        @{session.user.username}
+        <img src={session.user.profilePicture} />
+      </div>
       <nav>
         <ul>
-          {/* TODO: edit profile to username */}
-          <NavbarItem Icon={RiUserLine} href="/profile" text="Profile" />
+          <NavbarItem
+            Icon={RiUserLine}
+            href={`/${session.user.username}`}
+            text="Profile"
+          />
           <NavbarItem
             Icon={RiFileListLine}
-            href="/profile/lists"
+            href={`/${session.user.username}/lists`}
             text="Lists"
           />
           <NavbarItem
