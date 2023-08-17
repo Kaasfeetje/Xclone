@@ -1,13 +1,17 @@
+import { useContext } from "react";
 import Head from "next/head";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
 import { RiSearchLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Xlogo from "~/components/Xlogo";
+import { NavbarContext } from "~/context/NavbarContext";
 
 export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { setIsOpen } = useContext(NavbarContext);
 
   if (status === "loading") {
     return <p>Loading...</p>;
@@ -31,11 +35,21 @@ export default function Home() {
       </Head>
       <Layout>
         <Navbar />
-        <div className="border-x border-gray-400 bg-gray-900">
+        <div className="bg-white lg:border-x lg:border-gray-400">
           <header>
-            <div className="flex">
-              <div>Avatar</div>
-              <div>Logo</div>
+            <div className="relative flex items-center justify-center p-4">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="absolute left-4"
+              >
+                <img
+                  className="rounded-full"
+                  src={session?.user.profilePicture}
+                  width={32}
+                  height={32}
+                />
+              </button>
+              <Xlogo className="h-7" />
             </div>
             <div className="flex">
               <button>For you</button>
