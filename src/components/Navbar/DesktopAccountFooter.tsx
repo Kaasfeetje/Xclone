@@ -1,5 +1,7 @@
 import { Session } from "next-auth";
-import React from "react";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import React, { useState, useEffect, useRef } from "react";
 import { TbDots } from "react-icons/tb";
 
 type Props = {
@@ -7,10 +9,51 @@ type Props = {
 };
 
 const DesktopAccountFooter = ({ session }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+
   return (
-    <div className="absolute bottom-2 hidden w-full p-4 lg:block">
-      <div>popup</div>
-      <div className="flex items-center justify-between rounded-full p-3 transition-all duration-200 hover:bg-gray-200">
+    <div ref={ref} className="absolute bottom-2 hidden w-full py-4 lg:block">
+      <div
+        className={`${
+          !isOpen ? "hidden" : "block"
+        } absolute -top-28 left-0 z-20 w-full overflow-hidden rounded-3xl bg-white shadow-[0px_-1px_5px_0px_rgba(0,0,0,0.3)]`}
+      >
+        <div className="relative mx-auto mb-2 font-semibold ">
+          <button
+            className="px-5 py-4"
+            onClick={() => alert("Not implemented yet.")}
+          >
+            Add an existing account
+          </button>
+          <button
+            className="mx-auto px-5 py-4"
+            onClick={() => signOut({ callbackUrl: "/signin" })}
+          >
+            Log out of @{session.user.username}
+          </button>
+        </div>
+      </div>
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex cursor-pointer items-center justify-between rounded-full p-3 transition-all duration-200 hover:bg-gray-200"
+      >
         <div className="flex">
           <img
             src={session.user.profilePicture}
@@ -23,7 +66,7 @@ const DesktopAccountFooter = ({ session }: Props) => {
             <span className="text-gray-600">@{session.user.username}</span>
           </div>
         </div>
-        <TbDots />
+        <TbDots className="h-5 w-5" />
       </div>
     </div>
   );

@@ -33,7 +33,6 @@ const Profile = (props: Props) => {
     //TODO: handle error
     return <div>loading...</div>;
   }
-
   return (
     <div>
       @{data.username}

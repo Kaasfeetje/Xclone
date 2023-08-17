@@ -24,7 +24,7 @@ const Navbar = (props: Props) => {
         onClick={(e) => e.stopPropagation()}
         className={`${
           isOpen ? "block" : "hidden"
-        } fixed left-0 top-0 z-20 h-screen max-h-screen w-[259px] bg-white text-gray-800 lg:left-auto lg:block`}
+        } fixed left-0 top-0 z-20 h-screen max-h-screen w-[259px] bg-white text-gray-800 lg:left-auto lg:block lg:px-2`}
       >
         <MobileAccountHeader session={session} />
         <div className="hidden lg:block">
@@ -54,7 +54,7 @@ const Navbar = (props: Props) => {
             />
           </ul>
         </nav>
-        <button className="mt-4 h-14 w-full rounded-3xl bg-blue-500 text-xl font-bold text-white transition-all duration-200 hover:bg-blue-600">
+        <button className="mt-4 hidden h-14 w-[90%] rounded-full bg-blue-500 text-xl font-bold text-white transition-all duration-200 hover:bg-blue-600 lg:block">
           Post
         </button>
         <button

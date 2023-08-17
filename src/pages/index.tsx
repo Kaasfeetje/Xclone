@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import Head from "next/head";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
@@ -7,11 +7,15 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Xlogo from "~/components/Xlogo";
 import { NavbarContext } from "~/context/NavbarContext";
+import Tabs from "~/components/common/Tabs/Tabs";
 
 export default function Home() {
   const router = useRouter();
+
   const { data: session, status } = useSession();
   const { setIsOpen } = useContext(NavbarContext);
+
+  const ref = useRef<HTMLDivElement>(null);
 
   if (status === "loading") {
     return <p>Loading...</p>;
@@ -35,12 +39,13 @@ export default function Home() {
       </Head>
       <Layout>
         <Navbar />
-        <div className="bg-white lg:border-x lg:border-gray-400">
-          <header>
-            <div className="relative flex items-center justify-center p-4">
+        <div className="bg-white">
+          {/* <div className="flex"> */}
+          <header className="sticky top-0 w-full">
+            <div className="relative flex items-center justify-center p-4 lg:justify-start lg:p-0">
               <button
                 onClick={() => setIsOpen(true)}
-                className="absolute left-4"
+                className="absolute left-4 lg:hidden"
               >
                 <img
                   className="rounded-full"
@@ -49,28 +54,33 @@ export default function Home() {
                   height={32}
                 />
               </button>
-              <Xlogo className="h-7" />
+              <Xlogo className="h-7 lg:hidden" />
+              <h1 className="hidden h-full w-full cursor-pointer py-4 text-xl font-bold lg:block">
+                {router.asPath === "/" ? "Home" : router.asPath}
+              </h1>
             </div>
-            <div className="flex">
+            <Tabs tabNames={["For you", "Following"]} element={ref.current}>
               <button>For you</button>
               <button>Following</button>
-            </div>
+            </Tabs>
           </header>
-          <div className="h-screen">a</div>
-          <div className="h-screen">a</div>
-          <div className="h-screen">a</div>
+          <div ref={ref} className="mt-4 h-[500vh]">
+            a
+          </div>
         </div>
-        <div className=" bg-gray-300">
-          <form className="relative">
-            <RiSearchLine className="absolute left-0 top-0 ml-1 mt-1" />
-            <input
-              className="w-full pl-6"
-              type="search"
-              placeholder="Search..."
-            ></input>
+        <div className=" bg-white">
+          <form className="sticky top-3 mt-3  rounded-full border border-white focus-within:border-blue-500">
+            <label>
+              <input
+                className="peer w-full rounded-full p-3 pl-12 outline-none"
+                type="search"
+                placeholder="Search..."
+              ></input>
+              <RiSearchLine className="absolute left-0 top-0 ml-3 mt-[14px] h-5 w-5 peer-focus:text-blue-500 " />
+              {/* TODO: add suggestions */}
+            </label>
           </form>
-          <div className="h-screen">a</div>
-          <div className="h-screen">a</div>
+          <div className="h-[200vh]">a</div>
         </div>
       </Layout>
     </>
