@@ -1,6 +1,7 @@
 import React from "react";
 import NavbarItem from "./NavbarItem";
 import { RiUserLine, RiFileListLine, RiBookmarkLine } from "react-icons/ri";
+import { signOut } from "next-auth/react";
 
 type Props = {};
 
@@ -24,6 +25,9 @@ const Navbar = (props: Props) => {
           />
         </ul>
       </nav>
+      <button onClick={() => signOut({ callbackUrl: "/signin" })}>
+        Sign out
+      </button>
     </div>
   );
 };

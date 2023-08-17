@@ -1,14 +1,23 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
 import { api } from "~/utils/api";
 import { RiSearchLine } from "react-icons/ri";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "unauthenticated") {
+    router.push("/signin?redirect=/thisisatest");
+    return <p>Access Denied</p>;
+  }
   return (
     <>
       <Head>
