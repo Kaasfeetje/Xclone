@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* for 'react-contenteditable' placeholder*/
+[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    display: block;
+    color: #aaa;
+  }

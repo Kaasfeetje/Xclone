@@ -8,12 +8,15 @@ import { useRouter } from "next/router";
 import Xlogo from "~/components/Xlogo";
 import { NavbarContext } from "~/context/NavbarContext";
 import Tabs from "~/components/common/Tabs/Tabs";
+import MainPageHeader from "~/components/Main/MainPageHeader";
+import CreatePostForm from "~/components/Main/CreatePostForm";
+import ForYouContainer from "~/components/Main/Containers/ForYouContainer";
+import FollowingContainer from "~/components/Main/Containers/FollowingContainer";
 
 export default function Home() {
   const router = useRouter();
 
   const { data: session, status } = useSession();
-  const { setIsOpen } = useContext(NavbarContext);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -39,33 +42,14 @@ export default function Home() {
       </Head>
       <Layout>
         <Navbar />
-        <div className="bg-white">
-          {/* <div className="flex"> */}
-          <header className="sticky top-0 w-full">
-            <div className="relative flex items-center justify-center p-4 lg:justify-start lg:p-0">
-              <button
-                onClick={() => setIsOpen(true)}
-                className="absolute left-4 lg:hidden"
-              >
-                <img
-                  className="rounded-full"
-                  src={session?.user.profilePicture}
-                  width={32}
-                  height={32}
-                />
-              </button>
-              <Xlogo className="h-7 lg:hidden" />
-              <h1 className="hidden h-full w-full cursor-pointer py-4 text-xl font-bold lg:block">
-                {router.asPath === "/" ? "Home" : router.asPath}
-              </h1>
-            </div>
-            <Tabs tabNames={["For you", "Following"]} element={ref.current}>
-              <button>For you</button>
-              <button>Following</button>
-            </Tabs>
-          </header>
+        <div className="bg-white ">
+          <MainPageHeader containerRef={ref}>
+            <ForYouContainer />
+            <FollowingContainer />
+          </MainPageHeader>
           <div ref={ref} className="mt-4 h-[500vh]">
-            a
+            <CreatePostForm />
+            {/* this is where for you and following are portalled */}
           </div>
         </div>
         <div className=" bg-white">

@@ -45,12 +45,13 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    username       String?   @unique
+    username       String? @unique
     profilePicture String?
-    isRegistered   Boolean   @default(false)
-    
-    accounts       Account[]
-    sessions       Session[]
+    isRegistered   Boolean @default(false)
+
+    accounts Account[]
+    sessions Session[]
+    Post     Post[]
 }
 
 model VerificationToken {
@@ -59,4 +60,25 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Post {
+    id              String     @id @default(cuid())
+    text            String?
+    createdAt       DateTime //TODO: Add 'postedAt' if decide to add scheduled posts
+    //images added later  
+    visibility      Visibility @default(everyone)
+    replyPermission Visibility @default(everyone)
+
+    userId    String
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    replyToId String?
+    replyTo   Post?   @relation(name: "Replies", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    replies Post[] @relation("Replies")
+}
+
+enum Visibility {
+    everyone
+    followers
 }
