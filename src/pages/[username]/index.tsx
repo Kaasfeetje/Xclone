@@ -10,6 +10,8 @@ import Navbar from "~/components/Navbar/Navbar";
 import { api } from "~/utils/api";
 import Tabs from "~/components/common/Tabs/Tabs";
 import Profile from "~/components/User/Profile";
+import Sidebar from "~/components/Sidebar/Sidebar";
+import Header from "~/components/common/Header";
 
 type Props = {};
 
@@ -53,19 +55,13 @@ const ProfilePage = (props: Props) => {
       <Layout>
         <Navbar />
         <div className="bg-white ">
-          <header className="sticky top-0 z-20 flex h-[53px] items-center bg-white">
-            {/* TODO: blurry background */}
-            <button onClick={() => router.back()}>
-              <div className="mr-10 h-full w-5 pl-4">
-                <BsArrowLeft />
-              </div>
-            </button>
+          <Header>
             <div className="flex flex-col">
               <span className="text-xl font-bold">{data.name}</span>
               <span className="-mt-1 text-gray-600">0 posts</span>
               {/* TODO: Add post count */}
             </div>
-          </header>
+          </Header>
           <Profile user={data} session={session!} />
           <Tabs
             element={ref && ref.current}
@@ -81,20 +77,7 @@ const ProfilePage = (props: Props) => {
             {/* this is where for you and following are portalled */}
           </div>
         </div>
-        <div className=" bg-white">
-          <form className="sticky top-3 mt-3  rounded-full border border-white focus-within:border-blue-500">
-            <label>
-              <input
-                className="peer w-full rounded-full p-3 pl-12 outline-none"
-                type="search"
-                placeholder="Search..."
-              ></input>
-              <RiSearchLine className="absolute left-0 top-0 ml-3 mt-[14px] h-5 w-5 peer-focus:text-blue-500 " />
-              {/* TODO: add suggestions */}
-            </label>
-          </form>
-          <div className="h-[200vh]">a</div>
-        </div>
+        <Sidebar />
       </Layout>
     </>
   );

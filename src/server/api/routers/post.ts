@@ -3,6 +3,31 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { Visibility } from "@prisma/client";
 
 export const postRouter = createTRPCRouter({
+  fetchPost: protectedProcedure
+    .input(z.object({ postId: z.string().min(1) }))
+    .query(async ({ input, ctx }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.postId,
+        },
+        include: {
+          user: true,
+          likes: {
+            where: {
+              userId: ctx.session.user.id,
+            },
+          },
+          reposts: {
+            where: {
+              userId: ctx.session.user.id,
+            },
+          },
+          _count: true,
+        },
+      });
+
+      return post;
+    }),
   createPost: protectedProcedure
     .input(
       z.object({

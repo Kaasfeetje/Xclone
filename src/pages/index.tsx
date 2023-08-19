@@ -9,6 +9,7 @@ import MainPageHeader from "~/components/Main/MainPageHeader";
 import CreatePostForm from "~/components/Main/CreatePostForm";
 import ForYouContainer from "~/components/Main/Containers/ForYouContainer";
 import FollowingContainer from "~/components/Main/Containers/FollowingContainer";
+import Sidebar from "~/components/Sidebar/Sidebar";
 
 export default function Home() {
   const router = useRouter();
@@ -48,20 +49,7 @@ export default function Home() {
             {/* this is where for you and following are portalled */}
           </div>
         </div>
-        <div className=" bg-white">
-          <form className="sticky top-3 mt-3  rounded-full border border-white focus-within:border-blue-500">
-            <label>
-              <input
-                className="peer w-full rounded-full p-3 pl-12 outline-none"
-                type="search"
-                placeholder="Search..."
-              ></input>
-              <RiSearchLine className="absolute left-0 top-0 ml-3 mt-[14px] h-5 w-5 peer-focus:text-blue-500 " />
-              {/* TODO: add suggestions */}
-            </label>
-          </form>
-          <div className="h-[200vh]">a</div>
-        </div>
+        <Sidebar />
       </Layout>
     </>
   );

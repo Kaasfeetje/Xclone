@@ -1,6 +1,6 @@
 import React from "react";
 import { api } from "~/utils/api";
-import Post from "../Post";
+import Post from "../Post/Post";
 
 type Props = {};
 
