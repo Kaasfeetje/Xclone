@@ -24,6 +24,42 @@ export const postRouter = createTRPCRouter({
 
       return post;
     }),
+  likePost: protectedProcedure
+    .input(z.object({ postId: z.string().min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const likeExists = await ctx.prisma.like.findUnique({
+        where: {
+          postId_userId: {
+            postId: input.postId,
+            userId: ctx.session.user.id,
+          },
+        },
+      });
+
+      if (likeExists) {
+        await ctx.prisma.like.delete({
+          where: {
+            postId_userId: {
+              postId: input.postId,
+              userId: ctx.session.user.id,
+            },
+          },
+        });
+
+        return likeExists.id;
+      }
+
+      // im not sure but maybe I need to check if post exists
+
+      const like = await ctx.prisma.like.create({
+        data: {
+          createdAt: new Date(),
+          postId: input.postId,
+          userId: ctx.session.user.id,
+        },
+      });
+      return like;
+    }),
   fetchForYou: protectedProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       where: {
@@ -31,6 +67,12 @@ export const postRouter = createTRPCRouter({
       },
       include: {
         user: true,
+        likes: {
+          where: {
+            userId: ctx.session.user.id,
+          },
+        },
+        _count: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -57,6 +99,12 @@ export const postRouter = createTRPCRouter({
       },
       include: {
         user: true,
+        likes: {
+          where: {
+            userId: ctx.session.user.id,
+          },
+        },
+        _count: true,
       },
       orderBy: {
         createdAt: "desc",

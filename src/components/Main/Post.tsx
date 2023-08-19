@@ -1,19 +1,36 @@
-import { Post, User } from "@prisma/client";
+import { Like, Post, User } from "@prisma/client";
 import React from "react";
 import { FaRegComment } from "react-icons/fa";
 import { LiaRetweetSolid } from "react-icons/lia";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdStats } from "react-icons/io";
 import { FiShare } from "react-icons/fi";
 import Link from "next/link";
+import { api } from "~/utils/api";
 
 type Props = {
   post: Post & {
     user: User;
+    likes: Like[];
+    _count: {
+      replies: number;
+      likes: number;
+    };
   };
 };
 
 const Post = ({ post }: Props) => {
+  const utils = api.useContext();
+  const likePostMutation = api.post.likePost.useMutation({
+    onSuccess: () => {
+      utils.post.invalidate();
+    },
+  });
+
+  const onLike = () => {
+    likePostMutation.mutate({ postId: post.id });
+  };
+
   return (
     <div className="my-3 w-full px-4">
       <div>{/* Retweet like and stuff */}</div>
@@ -57,9 +74,19 @@ const Post = ({ post }: Props) => {
             <div className="flex items-center">
               <LiaRetweetSolid className=" w-5 lg:mr-3" />0
             </div>
-            <div className="flex items-center">
-              <AiOutlineHeart className=" w-5 lg:mr-3" />0
-            </div>
+            <button onClick={onLike} className="flex items-center">
+              {post.likes.length === 0 ? (
+                <>
+                  <AiOutlineHeart className=" w-5 lg:mr-3" />
+                  <span>{post._count.likes}</span>
+                </>
+              ) : (
+                <>
+                  <AiFillHeart className=" w-5 text-red-500 lg:mr-3" />
+                  <span className="text-red-500">{post._count.likes}</span>
+                </>
+              )}
+            </button>
             <div className="flex items-center">
               <IoMdStats className=" w-5 lg:mr-3" />0
             </div>
