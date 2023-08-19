@@ -1,4 +1,4 @@
-import { Like, Post, User } from "@prisma/client";
+import { Like, Post, Repost, User } from "@prisma/client";
 import React from "react";
 import { FaRegComment } from "react-icons/fa";
 import { LiaRetweetSolid } from "react-icons/lia";
@@ -12,9 +12,11 @@ type Props = {
   post: Post & {
     user: User;
     likes: Like[];
+    reposts: Repost[];
     _count: {
       replies: number;
       likes: number;
+      reposts: number;
     };
   };
 };
@@ -26,9 +28,18 @@ const Post = ({ post }: Props) => {
       utils.post.invalidate();
     },
   });
+  const repostPostMutation = api.post.repostPost.useMutation({
+    onSuccess: () => {
+      utils.post.invalidate();
+    },
+  });
 
   const onLike = () => {
     likePostMutation.mutate({ postId: post.id });
+  };
+
+  const onRepost = () => {
+    repostPostMutation.mutate({ postId: post.id });
   };
 
   return (
@@ -71,9 +82,15 @@ const Post = ({ post }: Props) => {
             <div className="flex items-center">
               <FaRegComment className=" w-5 lg:mr-3" />0
             </div>
-            <div className="flex items-center">
-              <LiaRetweetSolid className=" w-5 lg:mr-3" />0
-            </div>
+            <button
+              onClick={onRepost}
+              className={`flex items-center ${
+                post.reposts.length === 0 ? "" : "text-green-500"
+              }`}
+            >
+              <LiaRetweetSolid className=" w-5 lg:mr-3" />
+              <span>{post._count.reposts}</span>
+            </button>
             <button onClick={onLike} className="flex items-center">
               {post.likes.length === 0 ? (
                 <>

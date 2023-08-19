@@ -60,6 +60,40 @@ export const postRouter = createTRPCRouter({
       });
       return like;
     }),
+  repostPost: protectedProcedure
+    .input(z.object({ postId: z.string().min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const repostExists = await ctx.prisma.repost.findUnique({
+        where: {
+          postId_userId: {
+            postId: input.postId,
+            userId: ctx.session.user.id,
+          },
+        },
+      });
+
+      if (repostExists) {
+        await ctx.prisma.repost.delete({
+          where: {
+            postId_userId: {
+              postId: input.postId,
+              userId: ctx.session.user.id,
+            },
+          },
+        });
+
+        return repostExists.id;
+      }
+
+      const repost = await ctx.prisma.repost.create({
+        data: {
+          createdAt: new Date(),
+          postId: input.postId,
+          userId: ctx.session.user.id,
+        },
+      });
+      return repost;
+    }),
   fetchForYou: protectedProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       where: {
@@ -68,6 +102,11 @@ export const postRouter = createTRPCRouter({
       include: {
         user: true,
         likes: {
+          where: {
+            userId: ctx.session.user.id,
+          },
+        },
+        reposts: {
           where: {
             userId: ctx.session.user.id,
           },
@@ -100,6 +139,11 @@ export const postRouter = createTRPCRouter({
       include: {
         user: true,
         likes: {
+          where: {
+            userId: ctx.session.user.id,
+          },
+        },
+        reposts: {
           where: {
             userId: ctx.session.user.id,
           },
