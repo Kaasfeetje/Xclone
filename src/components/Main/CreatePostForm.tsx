@@ -17,6 +17,7 @@ const CreatePostForm = (props: Props) => {
 
   const createPost = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(text.current);
     createPostMutation.mutate({
       text: text.current,
       visibility,

@@ -32,6 +32,35 @@ export const postRouter = createTRPCRouter({
       include: {
         user: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    });
+    return posts;
+  }),
+  fetchFollowing: protectedProcedure.query(async ({ ctx }) => {
+    const followed = await ctx.prisma.follow.findMany({
+      where: {
+        followerId: ctx.session.user.id,
+      },
+      select: {
+        followedId: true,
+      },
+    });
+
+    const posts = await ctx.prisma.post.findMany({
+      where: {
+        userId: {
+          in: followed.map((f) => f.followedId),
+        },
+      },
+      include: {
+        user: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
       take: 10,
     });
     return posts;

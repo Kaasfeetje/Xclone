@@ -49,9 +49,11 @@ model User {
     profilePicture String?
     isRegistered   Boolean @default(false)
 
-    accounts Account[]
-    sessions Session[]
-    Post     Post[]
+    accounts  Account[]
+    sessions  Session[]
+    Post      Post[]
+    following Follow[]  @relation(name: "follower")
+    followed  Follow[]  @relation(name: "followed")
 }
 
 model VerificationToken {
@@ -76,6 +78,18 @@ model Post {
     replyTo   Post?   @relation(name: "Replies", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
     replies Post[] @relation("Replies")
+}
+
+model Follow {
+    id         String   @id @default(cuid())
+    followerId String
+    follower   User     @relation(name: "follower", fields: [followedId], references: [id], onDelete: Cascade, map: "follower_fk")
+    followedId String
+    followed   User     @relation(name: "followed", fields: [followedId], references: [id], onDelete: Cascade, map: "followed_fk")
+    createdAt  DateTime
+    accepted   Boolean  @default(true)
+
+    @@unique([followerId, followedId])
 }
 
 enum Visibility {

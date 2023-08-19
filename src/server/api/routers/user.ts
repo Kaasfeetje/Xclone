@@ -32,8 +32,10 @@ export const userRouter = createTRPCRouter({
         },
         select: {
           //TODO: when implementing profiles add that here
+          id: true,
           username: true,
           profilePicture: true,
+          name: true,
         },
       });
       return user;

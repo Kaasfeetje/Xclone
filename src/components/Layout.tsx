@@ -5,7 +5,6 @@ type Props = {
 };
 
 const Layout = ({ children }: Props) => {
-  console.log("test", children);
   return (
     <div className=" text-gray-800 lg:mx-auto lg:flex lg:w-[1207px]">
       <div className="fixed z-10 w-[259px] lg:static">{children[0]}</div>

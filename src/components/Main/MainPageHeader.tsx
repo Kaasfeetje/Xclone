@@ -38,6 +38,7 @@ const MainPageHeader = ({ containerRef, children }: Props) => {
       <Tabs
         tabNames={["For you", "Following"]}
         element={containerRef && containerRef.current}
+        tabCount={2}
       >
         {children[0]}
         {children[1]}

@@ -5,10 +5,16 @@ type Props = {
   tabNames: string[];
   children: React.ReactNode[];
   element: HTMLDivElement | null;
+  tabCount: number;
 };
 
-const Tabs = ({ children, tabNames, element }: Props) => {
+const Tabs = ({ children, tabNames, element, tabCount }: Props) => {
   const [state, setState] = useState(0);
+
+  const gridClass = {
+    2: "grid-cols-2",
+    4: "grid-cols-4",
+  };
 
   if (tabNames.length !== children.length) {
     return <div>You should provide as many 'tabNames' as children.</div>;
@@ -16,7 +22,7 @@ const Tabs = ({ children, tabNames, element }: Props) => {
 
   return (
     <div>
-      <div className={`grid w-full grid-cols-${children.length} `}>
+      <div className={`grid w-full ${gridClass[tabCount as 2 | 4]}  `}>
         {tabNames.map((tabName, idx) => (
           <button
             key={tabName}

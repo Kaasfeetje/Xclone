@@ -5,6 +5,7 @@ import { LiaRetweetSolid } from "react-icons/lia";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdStats } from "react-icons/io";
 import { FiShare } from "react-icons/fi";
+import Link from "next/link";
 
 type Props = {
   post: Post & {
@@ -18,19 +19,24 @@ const Post = ({ post }: Props) => {
       <div>{/* Retweet like and stuff */}</div>
       <div className="flex w-full">
         <div className="min-w-[52px] pr-3 ">
-          {/* Profile Picture*/}
-          <img
-            src={post.user.profilePicture!}
-            width={40}
-            height={40}
-            className="h-[40px] w-[40px] rounded-full"
-          />
+          <Link href={`/${post.user.username}`}>
+            <img
+              src={post.user.profilePicture!}
+              width={40}
+              height={40}
+              className="h-[40px] w-[40px] rounded-full"
+            />
+          </Link>
         </div>
         <div className="grow overflow-x-hidden">
           <div className="">
-            <span className="font-bold">{post.user.name}</span>
+            <Link href={`/${post.user.username}`}>
+              <span className="font-bold">{post.user.name}</span>
+            </Link>
             {/* verified etc */}
-            <span className="px-1 text-gray-600">@{post.user.username}</span>
+            <Link href={`/${post.user.username}`}>
+              <span className="px-1 text-gray-600">@{post.user.username}</span>
+            </Link>
             <span>*</span>
             <span className="pl-1 text-gray-600">
               {((new Date().getTime() - post.createdAt.getTime()) / 1000 / 60)

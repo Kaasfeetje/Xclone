@@ -1,13 +1,10 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import Head from "next/head";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
 import { RiSearchLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Xlogo from "~/components/Xlogo";
-import { NavbarContext } from "~/context/NavbarContext";
-import Tabs from "~/components/common/Tabs/Tabs";
 import MainPageHeader from "~/components/Main/MainPageHeader";
 import CreatePostForm from "~/components/Main/CreatePostForm";
 import ForYouContainer from "~/components/Main/Containers/ForYouContainer";
@@ -32,7 +29,6 @@ export default function Home() {
   if (!session?.user.isRegistered) {
     router.push("/register?redirect=/");
   }
-
   return (
     <>
       <Head>
