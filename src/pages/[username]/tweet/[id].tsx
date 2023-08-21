@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import Layout from "~/components/Layout";
 import Post from "~/components/Main/Post/Post";
+import CommentForm from "~/components/Main/PostForm/CommentForm";
+import PostForm from "~/components/Main/PostForm/PostForm";
 import Navbar from "~/components/Navbar/Navbar";
 import Sidebar from "~/components/Sidebar/Sidebar";
 import Header from "~/components/common/Header";
@@ -14,12 +16,18 @@ type Props = {};
 const TweetPage = (props: Props) => {
   const router = useRouter();
   const postId = router.query.id as string;
-  const { data } = api.post.fetchPost.useQuery(
+  const { data: postData } = api.post.fetchPost.useQuery(
     { postId },
     {
       enabled: postId !== undefined,
     }
   );
+
+  const { data: commentData } = api.comment.fetchComments.useQuery(
+    { postId },
+    { enabled: postId !== undefined }
+  );
+
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -35,7 +43,7 @@ const TweetPage = (props: Props) => {
     router.push("/register?redirect=/");
   }
 
-  if (!data) {
+  if (!postData) {
     return <div>Loading...</div>;
   }
   return (
@@ -51,7 +59,13 @@ const TweetPage = (props: Props) => {
           <Header>
             <div className="text-xl font-bold">Post</div>
           </Header>
-          <Post post={data} detailed />
+          <Post post={postData} detailed />
+          <CommentForm replyToUser={postData.user} replyToId={postData.id} />
+          <div>
+            {commentData?.map((comment) => (
+              <Post post={comment} detailed={false} />
+            ))}
+          </div>
         </div>
         <Sidebar />
       </Layout>

@@ -31,7 +31,7 @@ const PostActions = ({ post, onRepost, onLike, detailed }: Props) => {
         <FaRegComment
           className={`${detailed ? "h-6 w-6" : "h-5 w-5"} lg:mr-3`}
         />
-        {!detailed && <span>0</span>}
+        {!detailed && <span>{post._count.replies}</span>}
       </div>
       {/* Reposts */}
       <button

@@ -29,6 +29,9 @@ const Post = ({ post, detailed }: Props) => {
   const likePostMutation = api.post.likePost.useMutation({
     onSuccess: () => {
       utils.post.invalidate();
+      if (post.replyToId !== undefined) {
+        utils.comment.invalidate();
+      }
     },
   });
   const repostPostMutation = api.post.repostPost.useMutation({
@@ -37,7 +40,8 @@ const Post = ({ post, detailed }: Props) => {
     },
   });
 
-  const onLike = () => {
+  const onLike = (e: React.MouseEvent) => {
+    e.preventDefault();
     likePostMutation.mutate({ postId: post.id });
   };
 
