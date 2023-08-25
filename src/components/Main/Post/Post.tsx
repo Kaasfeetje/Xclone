@@ -45,7 +45,8 @@ const Post = ({ post, detailed }: Props) => {
     likePostMutation.mutate({ postId: post.id });
   };
 
-  const onRepost = () => {
+  const onRepost = (e: React.MouseEvent) => {
+    e.preventDefault();
     repostPostMutation.mutate({ postId: post.id });
   };
 
@@ -70,7 +71,7 @@ const Post = ({ post, detailed }: Props) => {
             <PostHeader post={post} detailed={detailed} />
             {/* Reply to? */}
             <div className={`${detailed ? "mt-3" : ""}`}>
-              <span className="break-words">{post.text}</span>
+              <span className="whitespace-pre break-words">{post.text}</span>
               {/* Images */}
             </div>
             {detailed && (

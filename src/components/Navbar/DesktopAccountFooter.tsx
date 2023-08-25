@@ -3,6 +3,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { TbDots } from "react-icons/tb";
+import UseClickOutside from "~/hooks/useClickOutside";
 
 type Props = {
   session: Session;
@@ -10,26 +11,12 @@ type Props = {
 
 const DesktopAccountFooter = ({ session }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
 
   return (
-    <div ref={ref} className="absolute bottom-2 hidden w-full py-4 lg:block">
+    <UseClickOutside
+      className="absolute bottom-2 hidden w-full py-4 lg:block"
+      onOutsideClick={() => setIsOpen(false)}
+    >
       <div
         className={`${
           !isOpen ? "hidden" : "block"
@@ -68,7 +55,7 @@ const DesktopAccountFooter = ({ session }: Props) => {
         </div>
         <TbDots className="h-5 w-5" />
       </div>
-    </div>
+    </UseClickOutside>
   );
 };
 

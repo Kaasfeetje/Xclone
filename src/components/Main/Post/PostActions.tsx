@@ -18,8 +18,8 @@ type Props = {
       reposts: number;
     };
   };
-  onRepost: () => void;
-  onLike: () => void;
+  onRepost: (e: React.MouseEvent) => void;
+  onLike: (e: React.MouseEvent) => void;
   detailed: boolean;
 };
 

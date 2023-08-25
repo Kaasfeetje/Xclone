@@ -2,14 +2,13 @@ import { useRef } from "react";
 import Head from "next/head";
 import Layout from "~/components/Layout";
 import Navbar from "~/components/Navbar/Navbar";
-import { RiSearchLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import MainPageHeader from "~/components/Main/MainPageHeader";
-import CreatePostForm from "~/components/Main/CreatePostForm";
 import ForYouContainer from "~/components/Main/Containers/ForYouContainer";
 import FollowingContainer from "~/components/Main/Containers/FollowingContainer";
 import Sidebar from "~/components/Sidebar/Sidebar";
+import PostForm from "~/components/Main/PostForm/PostForm";
 
 export default function Home() {
   const router = useRouter();
@@ -45,7 +44,7 @@ export default function Home() {
             <FollowingContainer />
           </MainPageHeader>
           <div ref={ref} className="mt-4 h-[500vh]">
-            <CreatePostForm />
+            <PostForm />
             {/* this is where for you and following are portalled */}
           </div>
         </div>

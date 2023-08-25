@@ -21,7 +21,7 @@ const CommentForm = ({ replyToUser, replyToId }: Props) => {
     },
   });
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const text = useRef("");
   const ref = useRef<HTMLSpanElement>(null);
@@ -37,7 +37,11 @@ const CommentForm = ({ replyToUser, replyToId }: Props) => {
 
   return (
     <div>
-      <div className="ml-[52px] text-gray-600">
+      <div
+        className={`ml-[52px] text-gray-600 ${
+          isOpen ? "visible h-6" : "invisible h-0"
+        } transition-all duration-200`}
+      >
         Replying to{" "}
         <Link href={`/${replyToUser.username}`}>
           <span className="text-blue-500 hover:underline">
@@ -46,11 +50,11 @@ const CommentForm = ({ replyToUser, replyToId }: Props) => {
         </Link>
       </div>
 
-      <div className="flex w-full">
-        <div>
+      <div className={`flex w-full `}>
+        <div className={`${!isOpen ? "flex flex-col justify-center" : ""}`}>
           <img
             src={session?.user.profilePicture}
-            className="h-[40px] w-[40px] rounded-full"
+            className="my-auto h-[40px] w-[40px] rounded-full"
           />
         </div>
         <form
@@ -60,6 +64,8 @@ const CommentForm = ({ replyToUser, replyToId }: Props) => {
           <ContentEditable
             html={text.current}
             onChange={(e) => (text.current = e.target.value)}
+            onFocusCapture={() => setIsOpen(true)}
+            onBlurCapture={() => setIsOpen(false)}
             placeholder="What's happening"
             tagName="span"
             innerRef={ref}
